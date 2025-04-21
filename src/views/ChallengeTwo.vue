@@ -19,10 +19,13 @@ const isDebug = ref(true)
         <v-timeline-item v-for="(item, i) in items" :size="i !== items.length - 1 ? 'small' : 'large'"
           :dot-color="i !== items.length - 1 ? 'grey-lighten-1' : 'rgba(7, 133, 186, 0.824)'">
 
+          <!-- Display Date -->
           <pre class="date">
             {{ item.timestamp.slice(11, 16) }} Uhr, {{ item.timestamp.slice(8, 10) }}.{{ item.timestamp.slice(5, 7) }}.{{ item.timestamp.slice(0, 4) }} 
           </pre>
 
+
+          <!-- Display Title, status & comment -->
           <v-alert rounded="xl" class="border-md process-card" v-if="i !== items.length - 1">
             <div class="d-flex justify-space-between">
               <div class="ma-4 title">{{ item.title }}</div>
@@ -35,6 +38,8 @@ const isDebug = ref(true)
             </div>
 
           </v-alert>
+
+          <!-- highlight current/active step -->
 
           <v-alert rounded="xl" width="900px" max-width="100%" class="border-xl highlight"
             v-if="i === items.length - 1">
