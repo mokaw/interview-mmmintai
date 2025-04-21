@@ -6,7 +6,7 @@ const isDragging = ref(false)
 const color = ref('indigo')
 
 const props = withDefaults(defineProps<{ accept: string }>(), {
-  accept: '.jpg, .jpeg',
+  accept: '.jpg, .jpeg, .png, .webp',
 })
 
 const btnText = 'Datei wählen'
@@ -25,7 +25,13 @@ function dragLeave() {
 
 function onFileInput(event: Event) {
   const input = event.target as HTMLInputElement
-  handleFileList(input.files)
+  const files = input.files;
+
+  if (!files) {
+    console.error("Files is undefined")
+    return;
+  }
+  handleFileList(files)
 }
 
 function onFileDrop(event: DragEvent) {
@@ -43,8 +49,9 @@ function handleFileList(files: FileList) {
     const isAccepted = props.accept.includes(fileExtension)
 
     if (!isAccepted) {
-      throw new Error('Invalid File')
+     console.error('Invalid File');
     }
+
   }
 
   emit('drop', files)
@@ -52,17 +59,9 @@ function handleFileList(files: FileList) {
 </script>
 
 <template>
-  <v-card
-    id="dropfield"
-    class="mx-auto spaced contain"
-    :variant="isDragging ? 'tonal' : 'outlined'"
-    :color="color"
-    @dragover.prevent="dragOver"
-    @dragleave.prevent="dragLeave"
-    @drop.prevent="onFileDrop($event)"
-    max-width="500"
-    max-height="100%"
-  >
+  <v-card id="dropfield" class="mx-auto spaced contain" :variant="isDragging ? 'tonal' : 'outlined'" :color="color"
+    @dragover.prevent="dragOver" @dragleave.prevent="dragLeave" @drop.prevent="onFileDrop($event)" max-width="500"
+    max-height="100%">
     <v-card-text>
       <v-row align="center" no-gutters>
         <v-col class="text-h2 d-flex justify-center" cols="12">
@@ -79,15 +78,8 @@ function handleFileList(files: FileList) {
       </v-btn>
     </v-card-actions>
 
-    <input
-      name="file"
-      ref="uploader"
-      type="file"
-      style="display: none"
-      :accept="props.accept"
-      @change="onFileInput"
-      multiple
-    />
+    <input name="file" ref="uploader" type="file" style="display: none" :accept="props.accept" @change="onFileInput"
+      multiple />
   </v-card>
 </template>
 
@@ -97,7 +89,8 @@ function handleFileList(files: FileList) {
 }
 
 .grabbable {
-  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: move;
+  /* fallback if grab cursor is unsupported */
   cursor: grab;
   cursor: -moz-grab;
   cursor: -webkit-grab;

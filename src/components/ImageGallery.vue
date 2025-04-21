@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type { GalleryItem } from '@/lib/gallery-item.d.ts'
 
-const props = defineProps({ items: Array as () => GalleryItem[] })
+const props = defineProps({ item: Array as () => GalleryItem[] })
+
+
 </script>
 
 <template>
   <vue-picture-swipe
     class="my-gallery"
-    :items="props.items"
+    :items="props.item"
     :options="{ shareEl: false, rotationOn: true }"
   ></vue-picture-swipe>
 </template>
